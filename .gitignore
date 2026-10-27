@@ -1,0 +1,12 @@
+# Data never goes to GitHub: it is large, and it is not ours to redistribute
+data/
+
+# R session files
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
+# Large or temporary outputs
+*.rds
+*.h5
