@@ -1,0 +1,13 @@
+GSE197676 (controls)
+Samples: 282
+
+== source (missing: 0)
+  peripheral blood mononuclear cells: 282
+
+== gender (missing: 0)
+  Female: 145
+  Male: 137
+
+== age (missing: 0)
+  numeric: min 18.6 | Q1 28.9 | median 35.0 | Q3 42.3 | max 70.2
+
