@@ -1,0 +1,20 @@
+Matching run: seed 20261027, caliper 2 years, 1:1 within sex, survivors aged >= 18
+
+Controls (all)         n =  282 | age mean 35.9 (SD 10.3), median 35.0, range 18.6-70.2 | female 145 (51%)
+Survivor pool (18+)    n = 2068 | age mean 33.6 (SD 9.3), median 32.2, range 18.0-66.4 | female 1095 (53%)
+Matched survivors      n =  281 | age mean 35.7 (SD 10.1), median 35.0, range 18.7-66.4 | female 144 (51%)
+
+Standardised mean difference in age, matched survivors vs controls: -0.012 (below 0.1 is good balance)
+Mean absolute age gap within pairs: 0.04 years
+Controls with no survivor within 2 years: 1 (ages 70.2)
+
+Treatment exposure among matched survivors (1 = received):
+  chestrt                      68 of 281 (24%)
+  abdominal_pelvic_rt          59 of 281 (21%)
+  brainrt                      94 of 281 (33%)
+  alkylating.agent.classic    164 of 281 (58%)
+  anthracyclines              146 of 281 (52%)
+  epipodophyllotoxins          97 of 281 (35%)
+  platinum                     27 of 281 (10%)
+  corticosteroids             137 of 281 (49%)
+  vincristine                 200 of 281 (71%)
