@@ -33,9 +33,30 @@ proc_file <- file.path("data/raw", proc_name)
 clocks <- c("Horvath", "Hannum", "Levine")
 
 # ---------------------------------------------- 1. sample information ----
-# Read only the header of the series matrix (a few KB): GSM, title, age, sex.
-read_sample_rows <- function(src) {
-  con <- gzcon(url(src, "rb")); on.exit(close(con))
+# Download a GEO file once into data/raw, retrying if GEO refuses briefly
+# (it sometimes answers "403 Forbidden" when busy or after many requests).
+fetch_geo <- function(url, dest) {
+  if (file.exists(dest) && file.size(dest) > 0) return(invisible(dest))
+  for (attempt in 1:5) {
+    ok <- tryCatch({
+      download.file(url, dest, mode = "wb", quiet = TRUE, method = "libcurl",
+                    headers = c("User-Agent" = "Mozilla/5.0 (research script; R)"))
+      TRUE
+    }, error = function(e) FALSE, warning = function(w) FALSE)
+    if (!ok && nzchar(Sys.which("curl")))
+      ok <- system2("curl", c("-sSfL", "-A", shQuote("Mozilla/5.0"), "-o", shQuote(dest), shQuote(url))) == 0
+    if (ok && file.exists(dest) && file.size(dest) > 0) return(invisible(dest))
+    unlink(dest)
+    message(sprintf("GEO did not respond (attempt %d of 5); waiting %d seconds...", attempt, 30 * attempt))
+    Sys.sleep(30 * attempt)
+  }
+  stop("GEO refused the download after 5 attempts: ", url,
+       "\nWait 15-30 minutes and run this cell again.")
+}
+
+# Read only the sample rows of the series matrix (a few KB): GSM, title, age, sex.
+read_sample_rows <- function(path) {
+  con <- gzfile(path, "r"); on.exit(close(con))
   out <- character()
   repeat {
     chunk <- readLines(con, n = 500, warn = FALSE)
@@ -47,7 +68,9 @@ read_sample_rows <- function(src) {
   out <- out[startsWith(out, "!Sample_")]
   lapply(out, function(r) gsub('^"|"$', "", strsplit(r, "\t", fixed = TRUE)[[1]]))
 }
-fields <- read_sample_rows(paste0(base, "matrix/GSE197676_series_matrix.txt.gz"))
+matrix_file <- fetch_geo(paste0(base, "matrix/GSE197676_series_matrix.txt.gz"),
+                         "data/raw/GSE197676_series_matrix.txt.gz")
+fields <- read_sample_rows(matrix_file)
 keys   <- vapply(fields, `[`, "", 1)
 gsm    <- fields[[match("!Sample_geo_accession", keys)]][-1]
 char_value <- function(name) {
@@ -64,10 +87,8 @@ samples <- data.frame(sample_id = gsm,
 cat("Samples in series matrix:", nrow(samples), "\n")
 
 # ---------------------------------------------- 2. download the file -----
-if (!file.exists(proc_file)) {
-  cat("Downloading", proc_name, "(about 1 GB)...\n")
-  download.file(proc_url, proc_file, mode = "wb", quiet = FALSE)
-}
+if (!file.exists(proc_file)) cat("Downloading", proc_name, "(about 1 GB)...\n")
+fetch_geo(proc_url, proc_file)
 
 # Unzip once (about 3-4 GB) so it is not decompressed again at every read
 proc_txt <- sub("\\.gz$", "", proc_file)
@@ -97,7 +118,7 @@ is_beta <- min(first_vals, na.rm = TRUE) >= 0 && max(first_vals, na.rm = TRUE) <
 source("scripts/link_columns.R")
 meta_name <- "GSE197676_SJLIFE_controls_IlluminaEPIC_282samples_GEO_03012022_metadata.txt.gz"
 meta_file <- file.path("data/raw", meta_name)
-if (!file.exists(meta_file)) download.file(paste0(base, "suppl/", meta_name), meta_file, mode = "wb", quiet = TRUE)
+fetch_geo(paste0(base, "suppl/", meta_name), meta_file)
 meta <- tryCatch(fread(meta_file), error = function(e) NULL)
 link <- link_columns(beta_col, fields, gsm, meta)
 col_gsm <- link$gsm
