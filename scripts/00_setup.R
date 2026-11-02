@@ -4,7 +4,7 @@
 #
 # Script 01 needs only base R. The packages below are for the later steps.
 
-cran_pkgs <- c("ggplot2", "data.table", "BiocManager")
+cran_pkgs <- c("ggplot2", "data.table", "R.utils", "BiocManager")
 missing <- cran_pkgs[!vapply(cran_pkgs, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing)) install.packages(missing)
 
