@@ -24,6 +24,7 @@ repository folder, in order:
 |---|---|---|
 | `scripts/00_setup.R` | Installs the packages; saves their versions | small |
 | `scripts/01_geo_inventory.R` | Lists the GEO files and their sizes; reads the sample characteristics without downloading methylation values | a few MB |
+| `scripts/02_match_survivors.R` | Chooses one adult survivor per control, matched on age and sex, before any methylation data are opened | none (uses script 01 output) |
 
 Later scripts (clocks on the controls, matching, the main comparison) are
 added as the project moves on.
@@ -31,7 +32,8 @@ added as the project moves on.
 ## Status
 
 - [x] Analysis plan fixed
-- [ ] GEO inventory and sample characteristics
+- [x] GEO inventory and sample characteristics
+- [ ] Survivors matched to controls
 - [ ] Clocks on the 282 controls
 - [ ] Survivors versus controls
 - [ ] Write-up

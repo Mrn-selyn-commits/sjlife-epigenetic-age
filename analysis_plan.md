@@ -31,20 +31,41 @@ person, Illumina MethylationEPIC array.
 
 ## Data dictionary
 
-Exact GEO field names are filled in after `scripts/01_geo_inventory.R` has run.
+GEO field names confirmed by `scripts/01_geo_inventory.R` (27 October 2026).
 
 | Column | Meaning | Type | Unit or codes | GEO field |
 |---|---|---|---|---|
 | `sample_id` | GEO sample accession (GSM) | text | | `!Sample_geo_accession` |
-| `group` | Survivor or control | category | survivor, control | |
-| `age` | Age when blood was drawn | continuous | years | |
-| `sex` | Sex as recorded | category | female, male | |
-| `diagnosis` | Childhood cancer type (survivors only) | category | as recorded | |
-| `chest_rt` | Chest radiotherapy (survivors only) | category | yes, no | |
+| `group` | Survivor or control | category | survivor, control | series: GSE197674 survivors, GSE197676 controls |
+| `age` | Age when blood was drawn | continuous | years | `age` |
+| `sex` | Sex as recorded | category | Female, Male | `gender` |
+| `diagnosis` | Childhood cancer type (survivors only) | category | as recorded | not in GEO |
+| `chest_rt` | Chest radiotherapy (survivors only) | category | 1 = yes, 0 = no | `chestrt` |
 | `age_pheno`, `age_horvath`, `age_hannum` | Clock age | continuous | years | computed |
 | `eaa_pheno`, `eaa_horvath`, `eaa_hannum` | Age acceleration | continuous | years | computed |
 
 Missing values are `NA` in R.
+
+## Amendments
+
+Each amendment is dated and was made before any methylation values were
+downloaded or examined. The original text above is otherwise unchanged.
+
+**27 October 2026, after reading sample characteristics only (script 01):**
+
+1. *Survivor sample.* "About 300 survivors" is made exact: 1:1 nearest-age
+   matching within sex, without replacement, one survivor per control, caliper
+   2 years, seed 20261027, survivors aged 18 or over at sampling
+   (`scripts/02_match_survivors.R`). Controls without a survivor within 2 years
+   stay in the analysis.
+2. *Diagnosis.* GEO does not record the cancer diagnosis, so it is dropped from
+   the data dictionary. It was never part of the analysis.
+3. *Sample type.* GEO describes the samples as peripheral blood mononuclear
+   cells, while the publication describes blood-derived DNA. This will be
+   reported as a limitation; the analysis is unchanged.
+4. *Methylation files.* The series matrices hold sample information only. The
+   methylation values are in each series' supplementary `processed.txt.gz`
+   file (controls about 1 GB, SJLIFE1 about 7 GB, compressed).
 
 ## Data handling
 
