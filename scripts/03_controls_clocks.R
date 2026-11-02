@@ -94,17 +94,42 @@ cat(check, sep = "\n")
 is_beta <- min(first_vals, na.rm = TRUE) >= 0 && max(first_vals, na.rm = TRUE) <= 1
 
 # ---------------------------------------------- 4. link columns to GSM ---
-# Find, for each value column, the GSM whose sample information contains
-# that exact name (title, description, etc.).
-lookup <- character()
-for (f in fields) for (j in seq_along(f)[-1]) lookup[trimws(f[j])] <- gsm[j - 1]
-lookup[gsm] <- gsm
-col_gsm <- unname(lookup[trimws(beta_col)])
-matched <- mean(!is.na(col_gsm))
-cat(sprintf("Value columns linked to a GSM: %d of %d\n", sum(!is.na(col_gsm)), length(beta_col)))
-if (matched < 0.9) {
-  stop("Could not link most columns to GEO samples. Send results/03_controls_file_check.txt ",
-       "and this message so the script can be adjusted.")
+source("scripts/link_columns.R")
+meta_name <- "GSE197676_SJLIFE_controls_IlluminaEPIC_282samples_GEO_03012022_metadata.txt.gz"
+meta_file <- file.path("data/raw", meta_name)
+if (!file.exists(meta_file)) download.file(paste0(base, "suppl/", meta_name), meta_file, mode = "wb", quiet = TRUE)
+meta <- tryCatch(fread(meta_file), error = function(e) NULL)
+link <- link_columns(beta_col, fields, gsm, meta)
+col_gsm <- link$gsm
+
+# D. The controls only need age and sex. If no exact GSM link works (or the
+#    fingerprint link leaves some samples out), take them straight from the
+#    metadata file, which then covers every column.
+use_meta_direct <- FALSE
+if ((link$method == "none" || startsWith(link$method, "C")) && !is.null(meta)) {
+  m <- as.data.frame(meta)
+  key <- names(m)[which.max(vapply(m, function(v) mean(norm_name(beta_col) %in% norm_name(v)), numeric(1)))]
+  agec <- grep("^age", names(m), ignore.case = TRUE, value = TRUE)[1]
+  sexc <- grep("^(sex|gender)", names(m), ignore.case = TRUE, value = TRUE)[1]
+  if (!is.na(agec) && !is.na(sexc) && mean(norm_name(beta_col) %in% norm_name(m[[key]])) >= 0.9) {
+    r <- match(norm_name(beta_col), norm_name(m[[key]]))
+    samples <- data.frame(sample_id = beta_col, age = as.numeric(m[[agec]][r]), sex = m[[sexc]][r])
+    col_gsm <- beta_col
+    use_meta_direct <- TRUE
+    link$method <- sprintf("D: age and sex taken from the metadata file ('%s', '%s'), keyed by column name", agec, sexc)
+  }
+}
+link_report <- c("", "Linking columns to samples:", link$report,
+                 sprintf("Method used: %s", link$method),
+                 if (!is.null(meta)) c("", sprintf("Metadata file columns: %s", paste(names(meta), collapse = ", ")),
+                                       sprintf("Metadata first row: %s", paste(unlist(meta[1]), collapse = " | "))),
+                 sprintf("GEO record fields: %s", paste(unique(vapply(fields, `[`, "", 1)), collapse = ", ")),
+                 sprintf("GEO first sample: %s", paste(vapply(fields, `[`, "", 2), collapse = " | ")))
+write(link_report, "results/03_controls_file_check.txt", append = TRUE)
+cat(link_report, sep = "\n")
+if (link$method == "none" || mean(!is.na(col_gsm)) < 0.9) {
+  stop("Could not link the columns to samples. Send me the text printed above ",
+       "(or the file results/03_controls_file_check.txt).")
 }
 
 # ---------------------------------------------- 5. read the values -------
