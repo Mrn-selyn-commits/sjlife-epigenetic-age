@@ -1,0 +1,8 @@
+Controls with clock estimates: 282 of 282
+
+Horvath   n = 282 | correlation with age r = 0.92 | median absolute error 2.8 years | mean clock minus age +1.4 years
+Hannum    n = 282 | correlation with age r = 0.90 | median absolute error 10.1 years | mean clock minus age -10.1 years
+PhenoAge  n = 282 | correlation with age r = 0.88 | median absolute error 19.7 years | mean clock minus age -19.7 years
+
+Expected: r roughly 0.7-0.95 for all three clocks. A constant offset (mean
+difference) is normal and is removed when age acceleration is calculated.
