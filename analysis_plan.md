@@ -48,8 +48,11 @@ Missing values are `NA` in R.
 
 ## Amendments
 
-Each amendment is dated and was made before any methylation values were
-downloaded or examined. The original text above is otherwise unchanged.
+Each amendment is dated. Amendments 1 to 4 were made before any methylation
+values were downloaded. Amendments 5 to 8 were made after the controls' clocks
+had been computed (script 03), but before any survivor methylation values were
+opened. Amendment 9 was made after the primary results had
+been seen. The original text above is otherwise unchanged.
 
 **27 October 2026, after reading sample characteristics only (script 01):**
 
@@ -86,6 +89,32 @@ downloaded or examined. The original text above is otherwise unchanged.
 8. *Secondary analysis detail.* The chest radiotherapy comparison is reported for
    all three clocks, PhenoAge first.
 
+**3 November 2026, after the primary results (script 05) had been seen:**
+
+9. *Corrections and post hoc analyses.* No pre-specified analysis is changed.
+   - The introduction to this section previously said every amendment was made
+     before any methylation values were downloaded or examined. That was true
+     only of amendments 1 to 4; the wording above now states when each was made.
+   - Amendment 7 called each clock "a per-sample weighted sum". More exactly,
+     each clock is computed per sample from a weighted sum of CpGs plus an
+     intercept (Horvath's is then transformed back to years). In methylclock,
+     clock CpGs absent from the data are left out of the sum rather than
+     imputed, which is a likely contributor to the offsets in amendment 5, and
+     missing values at measured CpGs are imputed from other samples in the same
+     batch. Whether any such values occurred has not yet been checked.
+   - The reference below is corrected: the Genome Medicine 2022 paper is by
+     Dong, Song, Qin et al.; Qin et al. (JNCI 2021) is added. This project is a
+     reproduction and extension of that work, with the same controls.
+   - Following external review, the analyses in `scripts/06_sensitivity.R` were
+     added. They are exploratory and post hoc: the group difference estimated
+     without residuals and with the age line fitted in controls only; a
+     group-by-age interaction; effect sizes in SD units; Holm correction of the
+     secondary tests; the smallest difference the design could detect; and the
+     chest radiotherapy model adjusted for age and all other treatment flags.
+   - Known limitation added: controls (GSE197676) and survivors (GSE197674) are
+     separate GEO series and may have been processed in different batches, so
+     group is confounded with series. This design cannot remove that.
+
 ## Data handling
 
 - The data are de-identified. No attempt will be made to link a sample to a person.
@@ -93,8 +122,13 @@ downloaded or examined. The original text above is otherwise unchanged.
   Scripts read from `data/raw/` and write only to `data/processed/`.
 - `data/` is never committed. Only code, summaries and figures go to GitHub.
 
-## Reference
+## References
 
-Qin N, et al. Genome-wide association studies identify novel genetic loci for
-epigenetic age acceleration among survivors of childhood cancer. *Genome
-Medicine*. 2022. https://doi.org/10.1186/s13073-022-01038-6
+1. Qin N, Li Z, Song N, et al. Epigenetic age acceleration and chronic health
+   conditions among adult survivors of childhood cancer. *Journal of the
+   National Cancer Institute*. 2021;113(5):597-605.
+   https://doi.org/10.1093/jnci/djaa147
+2. Dong Q, Song N, Qin N, et al. Genome-wide association studies identify novel
+   genetic loci for epigenetic age acceleration among survivors of childhood
+   cancer. *Genome Medicine*. 2022;14:32.
+   https://doi.org/10.1186/s13073-022-01038-6
