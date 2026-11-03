@@ -1,0 +1,8 @@
+File: GSE197674_SJLIFE1_IlluminaEPIC_2138samples_GEO_03012022_processed.txt.gz
+Columns: 4277 (value columns: 2138; detection p-value columns: 2138)
+First value column names: SJCNS043924_G1, SJAML003318_G2, SJHL043905_G1, SJALL004247_G3, SJRHB044165_G1
+
+Linking columns to samples:
+A. column names found in GEO sample records: 2138 of 2138
+Method used: A: column names in GEO sample records
+Selected survivors found in the file: 281 of 281

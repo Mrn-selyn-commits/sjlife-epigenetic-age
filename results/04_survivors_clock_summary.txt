@@ -1,0 +1,7 @@
+Matched survivors with clock estimates: 281 of 281
+
+PhenoAge  n = 281 | correlation with age r = 0.88
+Horvath   n = 281 | correlation with age r = 0.92
+Hannum    n = 281 | correlation with age r = 0.89
+
+Comparison with controls is done in script 05, as set out in the analysis plan.
