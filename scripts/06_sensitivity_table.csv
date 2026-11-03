@@ -1,0 +1,19 @@
+section,clock,model,n,estimate,ci_low,ci_high,p_value,estimate_sd_units
+A. Direct model,PhenoAge,clock ~ age + group + sex,563,3.79373336272743,2.67798347532632,4.90948325012854,5.83172403704875e-11,0.62196307114495
+A. Controls-only age line,PhenoAge,EAA(controls' line) ~ group + sex,563,3.78033317878481,2.65081860651729,4.90984775105233,1.12374728391692e-10,0.619766179913548
+B. Group x age,PhenoAge,clock ~ age * group + sex (interaction term),563,0.217395275999806,0.108712740117115,0.326077811882497,9.60034160618129e-05,
+"C. Pre-specified, SD units",PhenoAge,EAA ~ group + sex (as script 05),563,3.79335195901668,2.67861176137898,4.90809215665438,5.62932512601709e-11,0.621900541968384
+E. Detectable difference,PhenoAge,"80% power, alpha 0.05, two-sided, SD of EAA in controls",563,1.44415611626466,,,,0.236761967013671
+A. Direct model,Horvath,clock ~ age + group + sex,563,1.6335170989126,0.973590286005841,2.29344391181936,1.51213321944143e-06,0.434432453875656
+A. Controls-only age line,Horvath,EAA(controls' line) ~ group + sex,563,1.62848680492455,0.965627546076153,2.29134606377295,1.80242142768108e-06,0.433094651557946
+B. Group x age,Horvath,clock ~ age * group + sex (interaction term),563,0.0833942776353501,0.0185992790101607,0.148189276260539,0.0117445216617982,
+"C. Pre-specified, SD units",Horvath,EAA ~ group + sex (as script 05),563,1.6334682464715,0.974145427039839,2.29279106590317,1.48032244153871e-06,0.43441946161137
+E. Detectable difference,Horvath,"80% power, alpha 0.05, two-sided, SD of EAA in controls",563,0.890252829959408,,,,0.236761967013671
+A. Direct model,Hannum,clock ~ age + group + sex,563,2.15790822165917,1.38903463674698,2.92678180657136,5.40270414122107e-08,0.512764389475742
+A. Controls-only age line,Hannum,EAA(controls' line) ~ group + sex,563,2.14873919859925,1.37052262823716,2.92695576896133,8.71050822953072e-08,0.510585636707566
+B. Group x age,Hannum,clock ~ age * group + sex (interaction term),563,0.148015255898671,0.0730964562948053,0.222934055502537,0.000116612528576408,
+"C. Pre-specified, SD units",Hannum,EAA ~ group + sex (as script 05),563,2.15762164768217,1.38944228011569,2.92580101524865,5.27705725409131e-08,0.512696293470138
+E. Detectable difference,Hannum,"80% power, alpha 0.05, two-sided, SD of EAA in controls",563,0.996384705492828,,,,0.236761967013671
+"F. Chest RT, fully adjusted",PhenoAge,EAA ~ chestrt + sex + age + all other treatment flags,281,4.20697554921957,0.990925730112096,7.42302536832705,0.0105454081838805,
+"F. Chest RT, fully adjusted",Horvath,EAA ~ chestrt + sex + age + all other treatment flags,281,1.41721537219061,-0.482300594533113,3.31673133891434,0.143021827177606,
+"F. Chest RT, fully adjusted",Hannum,EAA ~ chestrt + sex + age + all other treatment flags,281,2.37330717744782,0.0530530725535678,4.69356128234207,0.0450219759693598,

@@ -1,0 +1,41 @@
+EXPLORATORY / POST HOC analyses, added 3 November 2026 after the primary results were seen.
+They do not replace the pre-specified results in results/05_results.txt.
+
+A. Direct model
+  PhenoAge  +3.79 years (95% CI +2.68 to +4.91) | p < 0.001 | 0.62 SD | n = 563
+  Horvath   +1.63 years (95% CI +0.97 to +2.29) | p < 0.001 | 0.43 SD | n = 563
+  Hannum    +2.16 years (95% CI +1.39 to +2.93) | p < 0.001 | 0.51 SD | n = 563
+
+A. Controls-only age line
+  PhenoAge  +3.78 years (95% CI +2.65 to +4.91) | p < 0.001 | 0.62 SD | n = 563
+  Horvath   +1.63 years (95% CI +0.97 to +2.29) | p < 0.001 | 0.43 SD | n = 563
+  Hannum    +2.15 years (95% CI +1.37 to +2.93) | p < 0.001 | 0.51 SD | n = 563
+
+B. Group x age
+  PhenoAge  difference in slope +0.217 years per year of age (95% CI +0.109 to +0.326) | p < 0.001
+  Horvath   difference in slope +0.083 years per year of age (95% CI +0.019 to +0.148) | p = 0.012
+  Hannum    difference in slope +0.148 years per year of age (95% CI +0.073 to +0.223) | p < 0.001
+
+C. Pre-specified, SD units
+  PhenoAge  +3.79 years (95% CI +2.68 to +4.91) | p < 0.001 | 0.62 SD | n = 563
+  Horvath   +1.63 years (95% CI +0.97 to +2.29) | p < 0.001 | 0.43 SD | n = 563
+  Hannum    +2.16 years (95% CI +1.39 to +2.93) | p < 0.001 | 0.51 SD | n = 563
+
+E. Detectable difference
+  PhenoAge  smallest detectable difference 1.44 years (0.24 SD of EAA in controls), n per group 281
+  Horvath   smallest detectable difference 0.89 years (0.24 SD of EAA in controls), n per group 281
+  Hannum    smallest detectable difference 1.00 years (0.24 SD of EAA in controls), n per group 281
+
+F. Chest RT, fully adjusted
+  PhenoAge  +4.21 years (95% CI +0.99 to +7.42) | p = 0.011 | n = 281
+  Horvath   +1.42 years (95% CI -0.48 to +3.32) | p = 0.143 | n = 281
+  Hannum    +2.37 years (95% CI +0.05 to +4.69) | p = 0.045 | n = 281
+
+D. Holm correction across the five secondary tests (from script 05)
+  Secondary: survivors vs controls               Horvath   p = 1.5e-06 -> Holm p = 4.4e-06
+  Secondary: survivors vs controls               Hannum    p = 5.3e-08 -> Holm p = 2.6e-07
+  Secondary: chest radiotherapy (survivors only) PhenoAge  p = 6.5e-07 -> Holm p = 2.6e-06
+  Secondary: chest radiotherapy (survivors only) Horvath   p = 7.5e-06 -> Holm p = 1.5e-05
+  Secondary: chest radiotherapy (survivors only) Hannum    p = 7.5e-05 -> Holm p = 7.5e-05
+
+Treatment flags used in F: chestrt, anthracyclines, alkylatingagentclassic, corticosteroids, epipodophyllotoxins, vincristine, platinum, brainrt, abdominalpelvicrt (+ sex, age)
