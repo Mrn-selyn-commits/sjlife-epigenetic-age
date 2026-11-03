@@ -154,26 +154,34 @@ if (link$method == "none" || mean(!is.na(col_gsm)) < 0.9) {
        "(or the file results/03_controls_file_check.txt).")
 }
 
-# ---------------------------------------------- 5. read the values -------
-cat("Reading methylation values (this takes a few minutes)...\n")
-dt <- fread(proc_txt, select = c(id_col, beta_col))
-betas <- as.matrix(dt[, ..beta_col]); rownames(betas) <- dt[[id_col]]; rm(dt); invisible(gc())
-colnames(betas) <- col_gsm
-betas <- betas[, !is.na(colnames(betas)), drop = FALSE]
-if (!is_beta) {
-  cat("Values look like M-values; converting to beta values.\n")
-  betas <- 2^betas / (2^betas + 1)
+# ---------------------------------------------- 5-6. read and compute ----
+# The full matrix (about 866,000 CpGs x 282 samples) can exhaust Colab's
+# memory, so samples are read and scored in batches of 30. Each clock is a
+# per-sample weighted sum, so batching does not change the results.
+rm(peek); invisible(gc())
+run_clocks <- function(m) {
+  out <- tryCatch(DNAmAge(m, clocks = clocks, cell.count = FALSE),
+                  error = function(e) DNAmAge(m, clocks = clocks))
+  out <- as.data.frame(out)
+  id_name <- intersect(c("id", "ID", "sample", "Sample", "sample_id"), names(out))[1]
+  if (is.na(id_name)) out$id <- colnames(m) else names(out)[names(out) == id_name] <- "id"
+  out
 }
-cat(sprintf("Matrix: %d CpGs x %d samples\n", nrow(betas), ncol(betas)))
-
-# ---------------------------------------------- 6. compute the clocks ----
-clock_out <- tryCatch(
-  DNAmAge(betas, clocks = clocks, cell.count = FALSE),
-  error = function(e) DNAmAge(betas, clocks = clocks)
-)
-clock_out <- as.data.frame(clock_out)
-id_name <- intersect(c("id", "ID", "sample", "Sample", "sample_id"), names(clock_out))[1]
-if (is.na(id_name)) clock_out$id <- colnames(betas) else names(clock_out)[names(clock_out) == id_name] <- "id"
+keep <- which(!is.na(col_gsm))
+batches <- split(keep, ceiling(seq_along(keep) / 30))
+results <- vector("list", length(batches))
+for (i in seq_along(batches)) {
+  idx <- batches[[i]]
+  cat(sprintf("Batch %d of %d: reading %d samples and computing clocks...\n", i, length(batches), length(idx)))
+  dt <- fread(proc_txt, select = c(id_col, beta_col[idx]), showProgress = FALSE)
+  m <- as.matrix(dt[, -1, with = FALSE]); rownames(m) <- dt[[1]]; rm(dt)
+  colnames(m) <- col_gsm[idx]
+  if (!is_beta) m <- 2^m / (2^m + 1)
+  results[[i]] <- run_clocks(m)
+  if (i == 1) cat(sprintf("  (%d CpGs per sample%s)\n", nrow(m), if (!is_beta) "; M-values converted to beta" else ""))
+  rm(m); invisible(gc())
+}
+clock_out <- as.data.frame(rbindlist(results, fill = TRUE))
 pick <- function(pattern) {
   hit <- grep(pattern, names(clock_out), ignore.case = TRUE, value = TRUE)
   if (length(hit)) as.numeric(clock_out[[hit[1]]]) else NA_real_
