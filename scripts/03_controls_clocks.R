@@ -130,8 +130,9 @@ use_meta_direct <- FALSE
 if ((link$method == "none" || startsWith(link$method, "C")) && !is.null(meta)) {
   m <- as.data.frame(meta)
   key <- names(m)[which.max(vapply(m, function(v) mean(norm_name(beta_col) %in% norm_name(v)), numeric(1)))]
-  agec <- grep("^age", names(m), ignore.case = TRUE, value = TRUE)[1]
-  sexc <- grep("^(sex|gender)", names(m), ignore.case = TRUE, value = TRUE)[1]
+  bare <- sub("^characteristics[ _:.-]*", "", names(m), ignore.case = TRUE)
+  agec <- names(m)[grep("^age", bare, ignore.case = TRUE)[1]]
+  sexc <- names(m)[grep("^(sex|gender)", bare, ignore.case = TRUE)[1]]
   if (!is.na(agec) && !is.na(sexc) && mean(norm_name(beta_col) %in% norm_name(m[[key]])) >= 0.9) {
     r <- match(norm_name(beta_col), norm_name(m[[key]]))
     samples <- data.frame(sample_id = beta_col, age = as.numeric(m[[agec]][r]), sex = m[[sexc]][r])

@@ -12,6 +12,7 @@
 
 norm_name <- function(x) {
   x <- tolower(trimws(as.character(x)))
+  x <- sub("[._ -]*(red|grn)?\\.idat(\\.gz)?$", "", x)          # 2034..._R03C01_Red.idat
   x <- sub("[._ -]*(avg[._ -]*)?beta$", "", x)
   gsub("[^a-z0-9]", "", x)
 }
@@ -19,7 +20,7 @@ norm_name <- function(x) {
 norm_value <- function(x) {
   x <- trimws(tolower(as.character(x)))
   num <- suppressWarnings(as.numeric(x))
-  ifelse(!is.na(num), sprintf("%.1f", num), x)
+  ifelse(!is.na(num), sprintf("%.4f", num), x)
 }
 
 # Characteristics from series-matrix rows: list of "key: value" vectors -> data.frame
@@ -42,6 +43,12 @@ link_columns <- function(cols, fields, gsm, meta = NULL) {
   for (f in fields) for (j in seq_along(f)[-1]) {
     exact[trimws(f[j])] <- gsm[j - 1]
     norm[norm_name(f[j])] <- gsm[j - 1]
+    # IDs written inside square brackets, e.g. "... [SJNORM044990_G1]"
+    br <- regmatches(f[j], gregexpr("\\[([^]]+)\\]", f[j]))[[1]]
+    for (b in gsub("^\\[|\\]$", "", br)) {
+      exact[trimws(b)] <- gsm[j - 1]
+      norm[norm_name(b)] <- gsm[j - 1]
+    }
   }
   exact[gsm] <- gsm
   a <- unname(exact[trimws(cols)])
@@ -73,7 +80,7 @@ link_columns <- function(cols, fields, gsm, meta = NULL) {
 
   # C. fingerprint of shared characteristics
   ch <- series_characteristics(fields, gsm)
-  mnames <- setNames(names(meta), norm_name(names(meta)))
+  mnames <- setNames(names(meta), norm_name(sub("^characteristics[ _:.-]*", "", names(meta), ignore.case = TRUE)))
   alias <- c(gender = "sex", sex = "gender")
   shared <- character()
   for (k in setdiff(names(ch), "sample_id")) {
