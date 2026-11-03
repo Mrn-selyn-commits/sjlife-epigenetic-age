@@ -26,6 +26,8 @@ repository folder, in order:
 | `scripts/01_geo_inventory.R` | Lists the GEO files and their sizes; reads the sample characteristics without downloading methylation values | a few MB |
 | `scripts/02_match_survivors.R` | Chooses one adult survivor per control, matched on age and sex, before any methylation data are opened | none (uses script 01 output) |
 | `scripts/03_controls_clocks.R` | Computes the Horvath, Hannum and PhenoAge clocks for the 282 controls and checks them against chronological age. Run it in Colab with `notebooks/03_controls_clocks.ipynb` | about 1 GB |
+| `scripts/04_survivors_clocks.R` | Computes the same clocks for the 281 matched survivors. Run it in Colab with `notebooks/04_survivors_clocks.ipynb` | about 7 GB |
+| `scripts/05_compare.R` | The pre-specified comparison: age acceleration in survivors vs controls, and by chest radiotherapy. Runs on any computer | none (uses outputs of 03 and 04) |
 
 Later scripts (clocks on the controls, matching, the main comparison) are
 added as the project moves on.
@@ -35,7 +37,8 @@ added as the project moves on.
 - [x] Analysis plan fixed
 - [x] GEO inventory and sample characteristics
 - [x] Survivors matched to controls (281 pairs)
-- [ ] Clocks on the 282 controls
+- [x] Clocks on the 282 controls
+- [ ] Clocks on the 281 matched survivors
 - [ ] Survivors versus controls
 - [ ] Write-up
 

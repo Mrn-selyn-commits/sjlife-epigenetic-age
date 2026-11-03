@@ -67,6 +67,25 @@ downloaded or examined. The original text above is otherwise unchanged.
    methylation values are in each series' supplementary `processed.txt.gz`
    file (controls about 1 GB, SJLIFE1 about 7 GB, compressed).
 
+**3 November 2026, after computing clocks for the controls only (script 03), before any survivor methylation data were opened:**
+
+5. *Clock offsets in controls.* In these peripheral blood mononuclear cell samples,
+   all three clocks track chronological age closely (r = 0.92 Horvath, 0.90
+   Hannum, 0.88 PhenoAge), but Hannum and PhenoAge read on average about 10 and
+   20 years below chronological age (Horvath +1.4 years). Both clocks were
+   developed in whole blood. The offsets are removed by the pre-specified
+   definition of age acceleration (residual of clock age on chronological age),
+   so the analysis is unchanged; the point is reported as a limitation.
+6. *GEO labelling.* GEO describes the control samples as "blood from survivor of
+   childhood cancer", while their IDs (SJNORM…) and the series identify them as
+   community controls. This is treated as a labelling error in GEO.
+7. *Implementation only.* Clocks are computed in batches of 30 samples, and the
+   survivors' columns are extracted from the GEO file before computing, to stay
+   within cloud memory limits. Each clock is a per-sample weighted sum, so this
+   does not change any estimate.
+8. *Secondary analysis detail.* The chest radiotherapy comparison is reported for
+   all three clocks, PhenoAge first.
+
 ## Data handling
 
 - The data are de-identified. No attempt will be made to link a sample to a person.
