@@ -1,0 +1,18 @@
+Controls: 282 | Matched survivors: 281
+Epigenetic age acceleration = residual of clock age on chronological age (whole sample).
+Positive difference = survivors (or those with chest radiotherapy) biologically older.
+
+Primary: survivors vs controls
+  PhenoAge  n = 563 | difference +3.79 years (95% CI +2.68 to +4.91) | p < 0.001
+
+Secondary: survivors vs controls
+  Horvath   n = 563 | difference +1.63 years (95% CI +0.97 to +2.29) | p < 0.001
+  Hannum    n = 563 | difference +2.16 years (95% CI +1.39 to +2.93) | p < 0.001
+
+Secondary: chest radiotherapy (survivors only)
+  PhenoAge  n = 281 | difference +4.95 years (95% CI +3.03 to +6.86) | p < 0.001
+  Horvath   n = 281 | difference +2.51 years (95% CI +1.43 to +3.60) | p < 0.001
+  Hannum    n = 281 | difference +2.72 years (95% CI +1.39 to +4.05) | p < 0.001
+
+Chest radiotherapy among survivors: 68 yes, 213 no
+Significance level 0.05 (analysis plan). Analyses not in the plan are labelled exploratory elsewhere.
